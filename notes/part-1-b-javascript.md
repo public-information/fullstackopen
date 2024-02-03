@@ -71,27 +71,27 @@ me@my-MBP ~ % node
 - Arrays are 0 indexed. Items in an array can be accessed by their index using bracket notation, ex: some_array[0] will access the first item in the array
 - Array objects are iterable and have built in methods like .concat() .forEach() .map() .push()
 
-**Note .push() mutates the original array, where as push returns a new array and observes principles of immutable data preferred by React.
+**Note .push() mutates the original array, where as .concat() returns a **new** array and observes principles of immutable data preferred by React.
 
 ```shell
 me@my-MBP ~ % node
-> const odds_array = [1,3,5]
-> odds_array.length
+> const oddsArray = [1,3,5]
+> oddsArray.length
 3
 
-> odds_array[2]
+> oddsArray[2]
 5
 
-> odds_array[0] = -1
+> oddsArray[0] = -1
 -1
 
-> odds_array
+> oddsArray
 [ -1, 3, 5 ]
 
-> odds_array = []
+> oddsArray = []
 Uncaught TypeError: Assignment to constant variable.
 
-> another_odds_array = odds_array.concat(7)
+> anotherOddsArray = oddsArray.concat(7)
 [ -1, 3, 5, 7 ]
 
 ```
@@ -100,8 +100,8 @@ Individual items in an array can be assigned using destructuring assignment
 
 ```shell
 me@my-MBP ~ % node
-> const odds_array = [ -1, 3, 5, 7 ]
-> let [first, second, ...rest] = odds_array
+> const oddsArray = [ -1, 3, 5, 7 ]
+> let [first, second, ...rest] = oddsArray
     
 > first
 -1
@@ -120,25 +120,25 @@ me@my-MBP ~ % node
 - Content of objects can be mutated even when the object is assigned to const. The const itself cannot however be reassigned.
 - Objects holds content in named properties, consisting of a key and a value.
 - Properties of an object can be accessed using dot or bracket notation
-    - ex: some_object["color"] or some_object.color will access a property of the object named color
+    - ex: someObject["color"] or someObject.color will access a property of the object named color
 - Objects are iterable and have built in methods
 - Object property names can contain whitespace, but must be encapsulated in "" in those cases
 - Object property names with whitespace cannot be accessed via dot notation
 
 ```shell
 me@my-MBP ~ % node
-> const some_object = {"color": "red"}
+> const someObject = {"color": "red"}
 
-> some_object.color
+> someObject.color
 'red'
 
-> some_object["color"]
+> someObject["color"]
 'red'
 
-> some_object.color = "blue"
+> someObject.color = "blue"
 'blue'
 
-> some_object
+> someObject
 { color: 'blue' }
 
 ```
@@ -157,14 +157,15 @@ const divide = (dividend, divisor) => {
 let quotient = divide(15,5)
 
 // single param arrow function
-const double_plus_2 = single => {
+const doublePlus2 = single => {
     double = single * 2
     return double + 2
 }
-let result = double(4)
+let result = doublePlus2(4)
 
-// single expression arrow function
+// single expression arrow functions
 let triple = quantity => quantity * 3
+let zero = () => 9 * 0
 
 ```
 
@@ -179,6 +180,22 @@ function product(a, b) {
 const average = function(a, b) {
     return (a + b) / 2
 }
+```
+
+- Function Definition
+- Function Reference
+- Function Call
+
+```javascript
+// Function definition
+(number) => number - 1
+
+// Function Reference
+let countDown = (number) => number - 1
+
+// Function Call
+countDown(8)
+
 ```
 
 ### **classes**:

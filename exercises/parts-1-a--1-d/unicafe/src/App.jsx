@@ -24,18 +24,24 @@ const Button = ({handleClick, label}) => {
     )
 }
 
-const StatisticLine = ({label, count}) => {
+const StatisticRow = ({label, count}) => {
     return (
         <>
-            <p><Label label={label} />: {count}</p>
+            <tr>
+                <td><Label label={label} /></td>
+                <td>{count}</td>
+            </tr>
         </>
     )
 }
 
-const StatisticLinePercentage = ({label, percentage}) => {
+const StatisticRowPercentage = ({label, percentage}) => {
     return (
         <>
-            <p><Label label={label} />: {percentage} %</p>
+            <tr>
+                <td><Label label={label} /></td>
+                <td>{percentage} %</td>
+            </tr>
         </>
     )
 }
@@ -64,22 +70,27 @@ const Statistics = ({feedback}) => {
 
     if (!totalFeedback()){
         return (
-            <div>
+            <>
                 <Heading heading={statisticsHeading} />
                 <p>no feedback given</p>
-            </div>
+            </>
         )
     }
     return (
-        <div>
+        <>
             <Heading heading={statisticsHeading} />
-            <StatisticLine label={goodLabel} count={good}/>
-            <StatisticLine label={neutralLabel} count={neutral}/>
-            <StatisticLine label={badLabel} count={bad}/>
-            <StatisticLine label={'all'} count={totalFeedback()}/>
-            <StatisticLine label={'average'} count={averageFeedbackScore()}/>
-            <StatisticLinePercentage label={'positive'} percentage={positiveFeedbackPercentage()}/>
-        </div>
+            <table>
+                <tbody>
+                    <StatisticRow label={goodLabel} count={good}/>
+                    <StatisticRow label={neutralLabel} count={neutral}/>
+                    <StatisticRow label={badLabel} count={bad}/>
+                    <StatisticRow label={'all'} count={totalFeedback()}/>
+                    <StatisticRow label={'average'} count={averageFeedbackScore().toFixed(1)}/>
+                    <StatisticRowPercentage
+                        label={'positive'} percentage={positiveFeedbackPercentage().toFixed(1)}/>
+                </tbody>
+            </table>
+        </>
     )
 }
 

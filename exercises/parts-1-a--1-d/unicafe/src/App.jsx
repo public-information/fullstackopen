@@ -40,6 +40,39 @@ const Percentage = ({label, percentage}) => {
     )
 }
 
+const Statistics = ({feedback}) => {
+
+    const [goodLabel, neutralLabel, badLabel] = Object.getOwnPropertyNames(feedback)
+    const {good, neutral, bad} = feedback
+
+    const totalFeedback = () => {
+        return good + neutral + bad
+    }
+
+    const averageFeedbackScore = () => {
+        let score = good + (-bad)
+        let total = totalFeedback()
+        return total ? (score / total) : total
+    }
+
+    const positiveFeedbackPercentage = () => {
+        let positive = (good / totalFeedback()) * 100
+        return totalFeedback() ? positive : totalFeedback()
+    }
+
+    return (
+        <div>
+            <Heading heading={"statistics"} />
+            <Counter label={goodLabel} count={good}/>
+            <Counter label={neutralLabel} count={neutral}/>
+            <Counter label={badLabel} count={bad}/>
+            <Counter label={'all'} count={totalFeedback()}/>
+            <Counter label={'average'} count={averageFeedbackScore()}/>
+            <Percentage label={'positive'} percentage={positiveFeedbackPercentage()}/>
+        </div>
+    )
+}
+
 const App = () => {
 
     const goodLabel = 'good'
@@ -51,21 +84,6 @@ const App = () => {
         [`${neutralLabel}`]: 0,
         [`${badLabel}`]: 0,
     })
-
-    const totalFeedback = () => {
-        return feedback[goodLabel] + feedback[neutralLabel] + feedback[badLabel]
-    }
-
-    const averageFeedbackScore = () => {
-        let score = feedback[goodLabel] + (feedback[badLabel] * -1)
-        let total = totalFeedback()
-        return total ? (score / total) : total
-    }
-
-    const positiveFeedbackPercentage = () => {
-        let positive = (feedback[goodLabel] / totalFeedback()) * 100
-        return totalFeedback() ? positive : totalFeedback()
-    }
 
     const handleFeedback = (category) => () => {
             setFeedback({
@@ -83,13 +101,7 @@ const App = () => {
                 <Button handleClick={handleFeedback(badLabel)} label={badLabel} />
             </div>
             <div>
-                <Heading heading={"statistics"} />
-                <Counter label={goodLabel} count={feedback[goodLabel]}/>
-                <Counter label={neutralLabel} count={feedback[neutralLabel]}/>
-                <Counter label={badLabel} count={feedback[badLabel]}/>
-                <Counter label={'all'} count={totalFeedback()}/>
-                <Counter label={'average'} count={averageFeedbackScore()}/>
-                <Percentage label={'positive'} percentage={positiveFeedbackPercentage()}/>
+                <Statistics feedback={feedback} />
             </div>
         </div>
     )

@@ -42,6 +42,7 @@ const Percentage = ({label, percentage}) => {
 
 const Statistics = ({feedback}) => {
 
+    const statisticsHeading = "statistics"
     const [goodLabel, neutralLabel, badLabel] = Object.getOwnPropertyNames(feedback)
     const {good, neutral, bad} = feedback
 
@@ -50,19 +51,28 @@ const Statistics = ({feedback}) => {
     }
 
     const averageFeedbackScore = () => {
-        let score = good + (-bad)
-        let total = totalFeedback()
+        const total = totalFeedback()
+        const score = good + (-bad)
         return total ? (score / total) : total
     }
 
     const positiveFeedbackPercentage = () => {
-        let positive = (good / totalFeedback()) * 100
-        return totalFeedback() ? positive : totalFeedback()
+        const total = totalFeedback()
+        const positive = (good / total) * 100
+        return total ? positive : total
     }
 
+    if (!totalFeedback()){
+        return (
+            <div>
+                <Heading heading={statisticsHeading} />
+                <p>no feedback given</p>
+            </div>
+        )
+    }
     return (
         <div>
-            <Heading heading={"statistics"} />
+            <Heading heading={statisticsHeading} />
             <Counter label={goodLabel} count={good}/>
             <Counter label={neutralLabel} count={neutral}/>
             <Counter label={badLabel} count={bad}/>

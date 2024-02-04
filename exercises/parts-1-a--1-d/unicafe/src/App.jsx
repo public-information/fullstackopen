@@ -24,7 +24,7 @@ const Button = ({handleClick, label}) => {
     )
 }
 
-const Counter = ({label, count}) => {
+const StatisticLine = ({label, count}) => {
     return (
         <>
             <p><Label label={label} />: {count}</p>
@@ -32,7 +32,7 @@ const Counter = ({label, count}) => {
     )
 }
 
-const Percentage = ({label, percentage}) => {
+const StatisticLinePercentage = ({label, percentage}) => {
     return (
         <>
             <p><Label label={label} />: {percentage} %</p>
@@ -73,12 +73,12 @@ const Statistics = ({feedback}) => {
     return (
         <div>
             <Heading heading={statisticsHeading} />
-            <Counter label={goodLabel} count={good}/>
-            <Counter label={neutralLabel} count={neutral}/>
-            <Counter label={badLabel} count={bad}/>
-            <Counter label={'all'} count={totalFeedback()}/>
-            <Counter label={'average'} count={averageFeedbackScore()}/>
-            <Percentage label={'positive'} percentage={positiveFeedbackPercentage()}/>
+            <StatisticLine label={goodLabel} count={good}/>
+            <StatisticLine label={neutralLabel} count={neutral}/>
+            <StatisticLine label={badLabel} count={bad}/>
+            <StatisticLine label={'all'} count={totalFeedback()}/>
+            <StatisticLine label={'average'} count={averageFeedbackScore()}/>
+            <StatisticLinePercentage label={'positive'} percentage={positiveFeedbackPercentage()}/>
         </div>
     )
 }

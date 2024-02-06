@@ -1,5 +1,13 @@
 import { useState } from 'react'
 
+const Heading = ({heading}) => {
+    return (
+        <>
+            <h2>{heading}</h2>
+        </>
+    )
+}
+
 const Button = ({handleClick, label}) => {
     return (
         <>
@@ -29,11 +37,16 @@ const App = () => {
         'The only way to go fast, is to go well.'
     ]
 
+    // Array Functions
     const randomArrayIndex = (arrayLength) => {
         return Math.floor(Math.random() * (arrayLength))
     }
+
+    // State + Event Handlers
     const [randomlySelected, setRandomlySelected] = useState(randomArrayIndex(anecdotes.length))
     const [vote, setVote] = useState(new Array(anecdotes.length).fill(0))
+
+    const mostVotesIndex = () => vote.indexOf(Math.max(...vote))
 
     const handleAnecdoteSelection = (anecdotesLength) => () => {
         setRandomlySelected(randomArrayIndex(anecdotesLength))
@@ -50,9 +63,16 @@ const App = () => {
 
     return (
         <div>
-            <Anecdote text={anecdotes[randomlySelected]} votes={vote[randomlySelected]} />
-            <Button handleClick={handleVoteSelection(randomlySelected)} label={'vote'} />
-            <Button handleClick={handleAnecdoteSelection(anecdotes.length)} label={'next anecdote'} />
+            <div>
+                <Heading heading={'Anecdote of the day'}/>
+                <Anecdote text={anecdotes[randomlySelected]} votes={vote[randomlySelected]} />
+                <Button handleClick={handleVoteSelection(randomlySelected)} label={'vote'} />
+                <Button handleClick={handleAnecdoteSelection(anecdotes.length)} label={'next anecdote'} />
+            </div>
+            <div>
+                <Heading heading={'Anecdote with most votes'}/>
+                <Anecdote text={anecdotes[mostVotesIndex()]} votes={vote[mostVotesIndex()]} />
+            </div>
         </div>
     )
 }

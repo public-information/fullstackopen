@@ -6,12 +6,21 @@ const App = () => {
     ])
     const [newName, setNewName] = useState('')
 
+    const checkForExistingPerson = (nawName) => {
+        return persons.filter(
+            person => person.name.toLowerCase() === newName.toLowerCase()
+        ).length
+    }
+
     const addName = (event) => {
         event.preventDefault()
-        const nameObject = {
-            name: newName
+        if (!checkForExistingPerson(newName)) {
+            setPersons(persons.concat({
+                name: newName
+            }))
+        } else {
+            alert(`${newName.toLowerCase()} is already added to phonebook`)
         }
-        setPersons(persons.concat(nameObject))
         setNewName("")
     }
     return (

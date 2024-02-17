@@ -14,10 +14,16 @@ const get = () => {
             .then(response => response.data)
 }
 
+const put = (updatedPerson) => {
+    return axios
+        .put(`${personsUrl}/${updatedPerson.id}`, updatedPerson)
+        .then(response => response.data)
+}
+
 const remove = id => {
     return axios
         .delete(`${personsUrl}/${id}`)
         .then(response => response.data)
 }
 
-export default { add, get, remove }
+export default { add, get, put, remove }

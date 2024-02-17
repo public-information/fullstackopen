@@ -30,10 +30,10 @@ const App = () => {
         )
     }
 
-    const matchingPersonsCount = () => {
+    const matchingPersons = () => {
         return persons.filter(
             person => person.name.toLowerCase() === newName.toLowerCase()
-        ).length
+        )
     }
 
     const handleDeletePerson = (person) => () => {
@@ -53,7 +53,8 @@ const App = () => {
 
     const handleAddPerson = (event) => {
         event.preventDefault()
-        if (!matchingPersonsCount(newName)) {
+        const matches = matchingPersons(newName)
+        if (!matches.length) {
             personsService
                 .add({
                     name: newName,
@@ -66,7 +67,21 @@ const App = () => {
                     console.log('promise rejected', error)
                 })
         } else {
-            alert(`${newName.toLowerCase()} is already added to phonebook`)
+            if (confirm(`${newName} is already added to phonebook, replace old number with new one ?`)) {
+                personsService
+                    .put({
+                        ...matches[0],
+                        number: newNumber,
+                    })
+                    .then(newPersonData => {
+                        setPersons(persons.map(
+                            person => person.id !== newPersonData.id ? person : newPersonData
+                        ))
+                    })
+                    .catch((error) => {
+                        console.log('promise rejected', error)
+                    })
+            }
         }
         setNewName('')
         setNewNumber('')

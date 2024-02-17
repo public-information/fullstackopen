@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 
-import AddPerson from './AddPerson.jsx'
-import Search from './Search.jsx'
-import TelephoneDirectory from './TelephoneDirectory.jsx'
+import AddPerson from './components/AddPerson.jsx'
+import Search from './components/Search.jsx'
+import TelephoneDirectory from './components/TelephoneDirectory.jsx'
 
 import personsService from './services/personsService.js'
 
@@ -36,6 +36,21 @@ const App = () => {
         ).length
     }
 
+    const handleDeletePerson = (person) => () => {
+        if ( confirm(`delete ${person.name} ?`) ) {
+            personsService
+                .remove(person.id)
+                .then(removedData => {
+                    setPersons(persons.filter(
+                        person => person.id !== removedData.id
+                    ))
+                })
+                .catch((error) => {
+                    console.log('promise rejected', error)
+                })
+        }
+    }
+
     const handleAddPerson = (event) => {
         event.preventDefault()
         if (!matchingPersonsCount(newName)) {
@@ -60,7 +75,7 @@ const App = () => {
         <div>
             <Search searchString={searchString} handleSearch={setSearchString}/>
             <AddPerson newName={newName} newNumber={newNumber} handleNameInput={setNewName} handleNumberInput={setNewNumber} handleAddPerson={handleAddPerson} />
-            <TelephoneDirectory persons={searchResults(searchString)}/>
+            <TelephoneDirectory persons={searchResults(searchString)} handleDeleteButton={handleDeletePerson}/>
         </div>
     )
 }

@@ -1,4 +1,5 @@
 import Input from './Input.jsx'
+import Button from './Button.jsx'
 
 const AddPerson = ({newName, newNumber, handleNameInput, handleNumberInput, handleAddPerson}) => {
     return (
@@ -7,9 +8,7 @@ const AddPerson = ({newName, newNumber, handleNameInput, handleNumberInput, hand
             <form>
                 <Input label={'name'} handler={handleNameInput} value={newName} />
                 <Input label={'number'} handler={handleNumberInput} value={newNumber} />
-                <div>
-                    <button onClick={handleAddPerson} type='submit'>add</button>
-                </div>
+                <Button onClickHandler={handleAddPerson} type={'submit'} label={'add'}/>
             </form>
         </div>
     )

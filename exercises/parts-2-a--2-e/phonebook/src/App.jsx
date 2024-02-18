@@ -3,13 +3,17 @@ import { useState, useEffect } from 'react'
 import AddPerson from './components/AddPerson.jsx'
 import Search from './components/Search.jsx'
 import TelephoneDirectory from './components/TelephoneDirectory.jsx'
+import Notification from './components/Notification.jsx'
 
 import personsService from './services/personsService.js'
 
 const App = () => {
 
+    const notificationTimeout = 5000
+
     const [newName, setNewName] = useState('')
     const [newNumber, setNewNumber] = useState('')
+    const [notification, setNotification] = useState({})
     const [persons, setPersons] = useState([])
     const [searchString, setSearchString] = useState('')
 
@@ -36,6 +40,16 @@ const App = () => {
         )
     }
 
+    const handleClearNotification = (ms) => {
+        new Promise(resolve => setTimeout(resolve, ms))
+            .then(result => {
+                setNotification({})
+            })
+            .catch((error) => {
+                console.log('promise rejected', error)
+            })
+    }
+
     const handleDeletePerson = (person) => () => {
         if ( confirm(`delete ${person.name} ?`) ) {
             personsService
@@ -44,9 +58,22 @@ const App = () => {
                     setPersons(persons.filter(
                         person => person.id !== removedData.id
                     ))
+                    setNotification({
+                        message: `${removedData.name} was removed successfully`,
+                        type: 'success'
+                    })
+                    handleClearNotification(notificationTimeout)
                 })
                 .catch((error) => {
                     console.log('promise rejected', error)
+                    const message = error.response.status === 404 ?
+                        `${person.name} has already been removed from server` :
+                        `An error occurred while trying to remove ${person.name}`
+                    setNotification({
+                        message: message,
+                        type: 'error'
+                    })
+                    handleClearNotification(notificationTimeout)
                 })
         }
     }
@@ -62,6 +89,11 @@ const App = () => {
                 })
                 .then(newPersonData => {
                     setPersons(persons.concat(newPersonData))
+                    setNotification({
+                        message: `${newName} was added successfully`,
+                        type: 'success'
+                    })
+                    handleClearNotification(notificationTimeout)
                 })
                 .catch((error) => {
                     console.log('promise rejected', error)
@@ -77,9 +109,22 @@ const App = () => {
                         setPersons(persons.map(
                             person => person.id !== newPersonData.id ? person : newPersonData
                         ))
+                        setNotification({
+                            message: `${matches[0].name} was updated successfully`,
+                            type: 'success'
+                        })
+                        handleClearNotification(notificationTimeout)
                     })
                     .catch((error) => {
                         console.log('promise rejected', error)
+                        const message = error.response.status === 404 ?
+                            `${newName} has already been removed from server` :
+                            `An error occurred while trying to remove ${newName}`
+                        setNotification({
+                            message: message,
+                            type: 'error'
+                        })
+                        handleClearNotification(notificationTimeout)
                     })
             }
         }
@@ -88,6 +133,7 @@ const App = () => {
     }
     return (
         <div>
+            <Notification notification={notification}/>
             <Search searchString={searchString} handleSearch={setSearchString}/>
             <AddPerson newName={newName} newNumber={newNumber} handleNameInput={setNewName} handleNumberInput={setNewNumber} handleAddPerson={handleAddPerson} />
             <TelephoneDirectory persons={searchResults(searchString)} handleDeleteButton={handleDeletePerson}/>

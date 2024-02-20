@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 
 import Input from "./components/Input.jsx";
-import SearchResults from "./components/SearchResults.jsx";
+import CountrySearch from "./components/CountrySearch.jsx";
 
 import countriesService from './services/countriesService.js'
 
@@ -13,6 +13,10 @@ const App = () => {
 
     const filterSearchInput = (searchString)=> {
         return countries.filter(country => country.name.common.toLowerCase().includes(searchString.toLowerCase()))
+    }
+
+    const handleShowCountry = (commonName) => () => {
+        setSearchString(commonName)
     }
 
     useEffect(() => {
@@ -27,7 +31,7 @@ const App = () => {
     return (
         <div>
             <Input label={'search'} handleOnChange={setSearchString} value={searchString}/>
-            <SearchResults searchString={searchString} matchingCountries={filterSearchInput(searchString)} />
+            <CountrySearch searchString={searchString} matchingCountries={filterSearchInput(searchString)} handleShowCountry={handleShowCountry} />
         </div>
     )
 }

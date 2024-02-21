@@ -1,3 +1,7 @@
+import {useEffect, useState} from "react"
+
+import weatherServices from "../services/weatherServices.js"
+
 const CountryDataPoint = ({label, detail}) => {
     return (
         <p>{label} {detail}</p>
@@ -17,6 +21,21 @@ const CountryLanguages = ({languages}) => {
 }
 
 const CountryInfoPanel = ({country}) => {
+
+    const [temperature, setTemperature] = useState('')
+
+    useEffect(() => {
+        weatherServices
+            .getByLatLang(
+                country['capitalInfo']['latlng'][0],
+                country['capitalInfo']['latlng'][1]
+            )
+            .then(weatherData => {
+                setTemperature(weatherData['current']['temperature_2m'])
+            })
+            .catch(error => console.log('error', error))
+    }, [])
+
     return (
         <div>
             <h1>{country.name.common}</h1>
@@ -24,6 +43,7 @@ const CountryInfoPanel = ({country}) => {
             <CountryDataPoint label={'area'} detail={country.area} />
             <CountryLanguages languages={country.languages} />
             <img src={country.flags.png} />
+            <CountryDataPoint label={'most recent reported temp in capital city - celsius'} detail={temperature} />
         </div>
     )
 }
